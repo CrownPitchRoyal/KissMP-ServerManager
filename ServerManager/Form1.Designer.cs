@@ -38,6 +38,9 @@ namespace ServerManager
             this.saveROOTDirLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearROOTDirLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uPDATEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uPDATENOWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bACKUPExeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreExeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -63,9 +66,6 @@ namespace ServerManager
             this.availableServersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.selectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uPDATENOWToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bACKUPExeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restoreExeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnHELP = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -144,6 +144,27 @@ namespace ServerManager
             this.uPDATEToolStripMenuItem.Name = "uPDATEToolStripMenuItem";
             this.uPDATEToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.uPDATEToolStripMenuItem.Text = "UPDATE";
+            // 
+            // uPDATENOWToolStripMenuItem
+            // 
+            this.uPDATENOWToolStripMenuItem.Name = "uPDATENOWToolStripMenuItem";
+            this.uPDATENOWToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.uPDATENOWToolStripMenuItem.Text = "Update now";
+            this.uPDATENOWToolStripMenuItem.Click += new System.EventHandler(this.uPDATEToolStripMenuItem_Click);
+            // 
+            // bACKUPExeToolStripMenuItem
+            // 
+            this.bACKUPExeToolStripMenuItem.Name = "bACKUPExeToolStripMenuItem";
+            this.bACKUPExeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bACKUPExeToolStripMenuItem.Text = "Backup exe";
+            this.bACKUPExeToolStripMenuItem.Click += new System.EventHandler(this.bACKUPExeToolStripMenuItem_Click);
+            // 
+            // restoreExeToolStripMenuItem
+            // 
+            this.restoreExeToolStripMenuItem.Name = "restoreExeToolStripMenuItem";
+            this.restoreExeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.restoreExeToolStripMenuItem.Text = "Restore exe";
+            this.restoreExeToolStripMenuItem.Click += new System.EventHandler(this.restoreExeToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -389,27 +410,6 @@ namespace ServerManager
             this.selectedToolStripMenuItem.Name = "selectedToolStripMenuItem";
             this.selectedToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.selectedToolStripMenuItem.Text = "Selected";
-            // 
-            // uPDATENOWToolStripMenuItem
-            // 
-            this.uPDATENOWToolStripMenuItem.Name = "uPDATENOWToolStripMenuItem";
-            this.uPDATENOWToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.uPDATENOWToolStripMenuItem.Text = "Update now";
-            this.uPDATENOWToolStripMenuItem.Click += new System.EventHandler(this.uPDATEToolStripMenuItem_Click);
-            // 
-            // bACKUPExeToolStripMenuItem
-            // 
-            this.bACKUPExeToolStripMenuItem.Name = "bACKUPExeToolStripMenuItem";
-            this.bACKUPExeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.bACKUPExeToolStripMenuItem.Text = "Backup exe";
-            this.bACKUPExeToolStripMenuItem.Click += new System.EventHandler(this.bACKUPExeToolStripMenuItem_Click);
-            // 
-            // restoreExeToolStripMenuItem
-            // 
-            this.restoreExeToolStripMenuItem.Name = "restoreExeToolStripMenuItem";
-            this.restoreExeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.restoreExeToolStripMenuItem.Text = "Restore exe";
-            this.restoreExeToolStripMenuItem.Click += new System.EventHandler(this.restoreExeToolStripMenuItem_Click);
             // 
             // btnHELP
             // 

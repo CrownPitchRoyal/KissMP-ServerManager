@@ -510,113 +510,135 @@ namespace ServerManager
             {
                 try
                 {
-                    //CHECK IF FILE AND TEMP DIR EXIST FROM PREVIOUS SESSIONS AND DELETE THEM
-                    if (Directory.Exists("temp"))
+                    DialogResult rd = MessageBox.Show("Servers are running!\nWould you like to stop them and update?", "Caution!", MessageBoxButtons.YesNo);
+                    if (rd == DialogResult.Yes)
                     {
-                        Directory.Delete("temp", true);
-                    }
-                    if (File.Exists("kissmp.zip"))
-                    {
-                        File.Delete("kissmp.zip");
-                    }
+                        List<string> temp = new List<string>();
+                        string laufa = "";
+                        foreach (var item in sl)
+                        {
+                            Process[] localByName = Process.GetProcessesByName(item.ServerExe);
+                            if (localByName.Length > 0)
+                            {
+                                temp.Add(item.ServerExe);
+                            }
+                        }
+                        foreach (var item in temp)
+                        {
+                            Process[] localByName = Process.GetProcessesByName(item);
 
-
-                    //GET LINK OF LATEST TheHellBox release
-                    var client = new RestClient("https://api.github.com/");
-                    var request = new RestRequest("repos/TheHellBox/KISS-multiplayer/releases/latest");
-
-                    request.AddHeader("Accept", "application / json");
-                    request.AddHeader("User-Agent", "PostmanRuntime/7.28.0");
-                    request.AddHeader("Host", "api.github.com");
-
-                    var responseGet = client.Get(request);
-
-                    string iscem = "browser_download_url";
-                    string iscem2 = ".zip";
-                    var json = ((RestSharp.RestResponseBase)responseGet).Content;
-
-                    string link = json.Substring(json.IndexOf(iscem) + iscem.Length + 3);
-                    string link2 = link.Substring(0, link.IndexOf(iscem2) + iscem2.Length);
-
-
-                    //DOWNLOAD
-                    WebClient webClient = new WebClient();
-                    webClient.Headers.Add("Accept: text/html, application/xhtml+xml, */*");
-                    webClient.Headers.Add("User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)");
-                    webClient.DownloadFile(new Uri(link2), "kissmp.zip");
-                    string exePath = AppDomain.CurrentDomain.BaseDirectory + "temp";
-
-
-                    //EXTRACT
-                    if (Directory.Exists(exePath))
-                    {
-                        ZipFile.ExtractToDirectory("kissmp.zip", exePath);
-
-                        //DELETE DOWNLOADED FILE
+                            Process proc = Process.GetProcessById(localByName[0].Id);
+                            proc.Kill();
+                        }
+                        //CHECK IF FILE AND TEMP DIR EXIST FROM PREVIOUS SESSIONS AND DELETE THEM
+                        if (Directory.Exists("temp"))
+                        {
+                            Directory.Delete("temp", true);
+                        }
                         if (File.Exists("kissmp.zip"))
                         {
                             File.Delete("kissmp.zip");
                         }
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(exePath);
-                        ZipFile.ExtractToDirectory("kissmp.zip", exePath);
 
-                        //DELETE DOWNLOADED FILE
-                        if (File.Exists("kissmp.zip"))
-                        {
-                            File.Delete("kissmp.zip");
-                        }
-                    }
 
-                    //UPDATE
-                    string[] dirss = Directory.GetDirectories(exePath);
-                    if (dirss.Length > 0)
-                    {
-                        exePath = dirss[0] + "\\windows";
+                        //GET LINK OF LATEST TheHellBox release
+                        var client = new RestClient("https://api.github.com/");
+                        var request = new RestRequest("repos/TheHellBox/KISS-multiplayer/releases/latest");
 
+                        request.AddHeader("Accept", "application / json");
+                        request.AddHeader("User-Agent", "PostmanRuntime/7.28.0");
+                        request.AddHeader("Host", "api.github.com");
+
+                        var responseGet = client.Get(request);
+
+                        string iscem = "browser_download_url";
+                        string iscem2 = ".zip";
+                        var json = ((RestSharp.RestResponseBase)responseGet).Content;
+
+                        string link = json.Substring(json.IndexOf(iscem) + iscem.Length + 3);
+                        string link2 = link.Substring(0, link.IndexOf(iscem2) + iscem2.Length);
+
+
+                        //DOWNLOAD
+                        WebClient webClient = new WebClient();
+                        webClient.Headers.Add("Accept: text/html, application/xhtml+xml, */*");
+                        webClient.Headers.Add("User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)");
+                        webClient.DownloadFile(new Uri(link2), "kissmp.zip");
+                        string exePath = AppDomain.CurrentDomain.BaseDirectory + "temp";
+
+
+                        //EXTRACT
                         if (Directory.Exists(exePath))
                         {
-                            string[] files = Directory.GetFiles(exePath);
-                            if (files.Length > 0)
+                            ZipFile.ExtractToDirectory("kissmp.zip", exePath);
+
+                            //DELETE DOWNLOADED FILE
+                            if (File.Exists("kissmp.zip"))
                             {
-                                foreach (var item in files)
+                                File.Delete("kissmp.zip");
+                            }
+                        }
+                        else
+                        {
+                            Directory.CreateDirectory(exePath);
+                            ZipFile.ExtractToDirectory("kissmp.zip", exePath);
+
+                            //DELETE DOWNLOADED FILE
+                            if (File.Exists("kissmp.zip"))
+                            {
+                                File.Delete("kissmp.zip");
+                            }
+                        }
+
+                        //UPDATE
+                        string[] dirss = Directory.GetDirectories(exePath);
+                        if (dirss.Length > 0)
+                        {
+                            exePath = dirss[0] + "\\windows";
+
+                            if (Directory.Exists(exePath))
+                            {
+                                string[] files = Directory.GetFiles(exePath);
+                                if (files.Length > 0)
                                 {
-                                    if (item.Contains("kissmp-server.exe"))
+                                    foreach (var item in files)
                                     {
-                                        exePath = item;
+                                        if (item.Contains("kissmp-server.exe"))
+                                        {
+                                            exePath = item;
+                                        }
                                     }
                                 }
-                            }
 
-                            //IF kissmp-server.exe EXISTS, copy to each server dir, rename original exe to name.exe.old rename new one to name.exe
-                            if (File.Exists(exePath))
-                            {
-                                foreach (var item in sl)
+                                //IF kissmp-server.exe EXISTS, copy to each server dir, rename original exe to name.exe.old rename new one to name.exe
+                                if (File.Exists(exePath))
                                 {
-                                    if (File.Exists(item.ServerPath + "\\" + item.ServerExe + ".exe.old")) //IF exe.old exists delete it
+                                    foreach (var item in sl)
                                     {
-                                        File.Delete(item.ServerPath + "\\" + item.ServerExe + ".exe.old");
-                                    }
-                                    File.Copy(item.ServerPath + "\\" + item.ServerExe + ".exe", item.ServerPath + "\\" + item.ServerExe + ".exe.old"); //MAKE NEW BACKUP OF OG exe as exe.old
+                                        if (File.Exists(item.ServerPath + "\\" + item.ServerExe + ".exe.old")) //IF exe.old exists delete it
+                                        {
+                                            File.Delete(item.ServerPath + "\\" + item.ServerExe + ".exe.old");
+                                        }
+                                        File.Copy(item.ServerPath + "\\" + item.ServerExe + ".exe", item.ServerPath + "\\" + item.ServerExe + ".exe.old"); //MAKE NEW BACKUP OF OG exe as exe.old
 
-                                    if (File.Exists(item.ServerPath + "\\" + item.ServerExe + ".exe")) //IF OG exists, DELETE
-                                    {
-                                        File.Delete(item.ServerPath + "\\" + item.ServerExe + ".exe");
+                                        if (File.Exists(item.ServerPath + "\\" + item.ServerExe + ".exe")) //IF OG exists, DELETE
+                                        {
+                                            File.Delete(item.ServerPath + "\\" + item.ServerExe + ".exe");
+                                        }
+                                        File.Copy(exePath, item.ServerPath + "\\" + item.ServerExe + ".exe"); //COPY NEW EXE IN DIR
                                     }
-                                    File.Copy(exePath, item.ServerPath + "\\" + item.ServerExe + ".exe"); //COPY NEW EXE IN DIR
                                 }
                             }
                         }
-                    }
 
-                    //DELETE TEMP FILES
-                    if (Directory.Exists("temp"))
-                    {
-                        Directory.Delete("temp", true);
+                        //DELETE TEMP FILES
+                        if (Directory.Exists("temp"))
+                        {
+                            Directory.Delete("temp", true);
+                        }
+                        MessageBox.Show("Servers updated!");
                     }
-                    MessageBox.Show("Servers updated!");
+                    
                 }
                 catch (Exception err) { EH(err); }
             }
@@ -701,7 +723,7 @@ namespace ServerManager
 
         private void btnHELP_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://crownpitchroyal.com/ServerManager/help.html");
+            System.Diagnostics.Process.Start("https://github.com/CrownPitchRoyal/KissMP-ServerManager/tree/master");
         }
     }
 
